@@ -1,0 +1,50 @@
+class VacuumCleaner:
+    def __init__(self):
+        self.rooms = {
+            'Room1': self.get_room_status('Room1'),
+            'Room2': self.get_room_status('Room2')
+        }
+        self.current_room = self.get_starting_room()
+        self.cost = 0
+
+    def get_room_status(self, room):
+        while True:
+            status = input(f"Is {room} dirty or clean? (dirty/clean): ").strip().lower()
+            if status in ['dirty', 'clean']:
+                return status
+            print("Invalid input. Please enter 'dirty' or 'clean'.")
+
+    def get_starting_room(self):
+        while True:
+            room = input("From which room should the vacuum start? (Room1/Room2): ").strip()
+            if room in ['Room1', 'Room2']:
+                return room
+            print("Invalid input. Please enter 'Room1' or 'Room2'.")
+
+    def clean_room(self):
+        print(f"Vacuum cleaner is in {self.current_room}.")
+        if self.rooms[self.current_room] == 'dirty':
+            print(f"{self.current_room} is dirty. Cleaning...")
+            self.rooms[self.current_room] = 'clean'
+            self.cost += 1  # Cleaning cost is 1 unit
+        else:
+            print(f"{self.current_room} is already clean.")
+
+    def move_to_other_room(self):
+        self.current_room = 'Room2' if self.current_room == 'Room1' else 'Room1'
+        print(f"Moving to {self.current_room}.")
+        self.cost += 1  # Moving cost is 1 unit
+
+    def run(self):
+        self.clean_room()
+        self.move_to_other_room()
+        self.clean_room()
+        print("\nCleaning done.")
+        print(f"Final room states: {self.rooms}")
+        print(f"Total cost of cleaning and moving: {self.cost} units.")
+
+
+vacuum = VacuumCleaner()
+vacuum.run()
+print("SANA SUBODH")
+print("1BM23CS296")
