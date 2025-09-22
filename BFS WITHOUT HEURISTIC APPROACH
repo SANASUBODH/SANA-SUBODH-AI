@@ -1,0 +1,75 @@
+from collections import deque
+
+# Helper to convert list to tuple for hashability
+def list_to_tuple(state):
+    return tuple(state)
+
+# Get neighbors of current state by sliding the blank (_)
+def get_neighbors(state):
+    neighbors = []
+    state_list = list(state)
+    blank_idx = state_list.index('_')
+
+    # Define possible moves with index shifts on 3x3 grid
+    moves = {
+        'up': -3,
+        'down': 3,
+        'left': -1,
+        'right': 1
+    }
+
+    for move, pos_shift in moves.items():
+        new_idx = blank_idx + pos_shift
+
+        # Check boundaries for each move
+        if move == 'up' and blank_idx < 3:
+            continue
+        if move == 'down' and blank_idx > 5:
+            continue
+        if move == 'left' and blank_idx % 3 == 0:
+            continue
+        if move == 'right' and blank_idx % 3 == 2:
+            continue
+
+        # Swap blank with neighbor
+        new_state = state_list[:]
+        new_state[blank_idx], new_state[new_idx] = new_state[new_idx], new_state[blank_idx]
+        neighbors.append(tuple(new_state))
+
+    return neighbors
+
+def bfs(start, goal):
+    start = tuple(start)
+    goal = tuple(goal)
+
+    queue = deque([(start, [start])])
+    visited = set([start])
+
+    while queue:
+        current, path = queue.popleft()
+        if current == goal:
+            return path
+        for neighbor in get_neighbors(current):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    return None
+
+def print_state(state):
+    for i in range(0, 9, 3):
+        print(' '.join(str(x) for x in state[i:i+3]))
+    print()
+
+# Input states (replace _ with string '_' for blank)
+initial_state_input = input("Enter initial state (9 values, use _ for blank, space separated): ").split()
+goal_state_input = input("Enter goal state (9 values, use _ for blank, space separated): ").split()
+
+path = bfs(initial_state_input, goal_state_input)
+print("SANA SUBODH");
+print("1BM23CS296");
+if path:
+    print(f"Solution found in {len(path)-1} moves:")
+    for step in path:
+        print_state(step)
+else:
+    print("No solution found.")
